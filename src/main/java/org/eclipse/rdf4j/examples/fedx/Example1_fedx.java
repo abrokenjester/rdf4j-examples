@@ -1,0 +1,64 @@
+/******************************************************************************* 
+ * Copyright (c) 2020 Eclipse RDF4J contributors.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Distribution License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/org/documents/edl-v10.php.
+ *******************************************************************************/
+package org.eclipse.rdf4j.examples.fedx;
+
+import org.eclipse.rdf4j.federated.FedXFactory;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+
+/**
+ * FedX federation over two public SPARQL endpoints: combine data from two sources transparently in a single SPARQL
+ * query.
+ * 
+ * @see https://rdf4j.org/documentation/programming/federation/
+ */
+public class Example1_fedx {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+
+		Repository repository = FedXFactory.newFederation()
+				.withSparqlEndpoint("http://dbpedia.org/sparql")
+				.withSparqlEndpoint("https://query.wikidata.org/sparql")
+				.create();
+
+		try (RepositoryConnection conn = repository.getConnection()) {
+			// This query gets member states of the EU from DBPedia, then combines with info from Wikidata to figure out
+			// each state's GDP.
+			String query = "PREFIX wd: <http://www.wikidata.org/entity/> "
+					+ "PREFIX wdt: <http://www.wikidata.org/prop/direct/> "
+					+ "SELECT * WHERE { "
+					+ " ?country a <http://dbpedia.org/class/yago/WikicatMemberStatesOfTheEuropeanUnion> ."
+					+ " ?country <http://www.w3.org/2002/07/owl#sameAs> ?countrySameAs . "
+					+ " ?countrySameAs wdt:P2131 ?gdp ."
+					+ "} order by DESC(?gdp)";
+
+			TupleQuery tq = conn.prepareTupleQuery(query);
+			try (TupleQueryResult tqRes = tq.evaluate()) {
+				int count = 0;
+				while (tqRes.hasNext()) {
+					BindingSet b = tqRes.next();
+					System.out.println("country: "
+							+ b.getValue("country")
+							+ "\t GDP: " + b.getValue("gdp").stringValue());
+					count++;
+				}
+
+				System.out.println("Results: " + count);
+			}
+		}
+
+		repository.shutDown();
+	}
+
+}

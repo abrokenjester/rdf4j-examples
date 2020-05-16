@@ -1,0 +1,36 @@
+# this is not a valid data file because namespace prefixes are missing 
+
+ex:Picasso a ex:Artist ;
+	foaf:firstName "Pablo" ;
+	foaf:surname "Picasso";
+	ex:creatorOf ex:guernica ;
+	ex:homeAddress _:node1 .
+
+	_:node1  ex:street "31 Art Gallery" ;
+	         ex:city "Madrid" ;
+	         ex:country "Spain"@en ;
+	         ex:country "Spanje"@nl .
+
+ex:guernica a ex:Painting ;
+            rdfs:label "Guernica";
+            ex:technique "oil on canvas"@en.
+
+ex:VanGogh a ex:Artist ;
+        	foaf:firstName "Vincent" ;
+            foaf:surname "van Gogh";
+            ex:creatorOf ex:starryNight, ex:sunflowers, ex:potatoEaters .
+
+ex:starryNight a ex:Painting ;
+            ex:technique "oil on canvas"@en;
+            rdfs:label "Starry Night"@en .
+
+ex:sunflowers a ex:Painting ;
+            ex:technique "oil on canvas";
+            rdfs:label "Sunflowers"@en ;
+            rdfs:label "Zonnebloemen"@nl .
+
+ex:potatoEaters a ex:Painting ;
+            ex:technique "oil on canvas";
+            rdfs:label "The Potato Eaters"@en ;
+            rdfs:label "De Aardappeleters"@en ;
+            rdfs:label "De Aardappeleters"@nl .

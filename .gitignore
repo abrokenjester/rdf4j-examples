@@ -1,0 +1,40 @@
+# Eclipse settings
+.project
+**/.project
+.classpath
+**/.classpath
+.settings
+**/.settings
+bin
+**/bin
+
+# Eclipse Plug-In Settings
+.pmd
+
+# Maven generated stuff
+target/
+*/target/
+pom.xml.versionsBackup
+dependency-reduced-pom.xml
+
+# GEdit generated stuff
+*.*~
+
+# IntelliJ files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Mac nonsense
+.DS_Store
+
+# NetBean (generated) files
+**/nb-configuration.xml
+**/nbactions*.xml
+*.jfr
+compliance/repository/overlays
+**/webapp/META-INF/context.xml
+/core/sail/elasticsearch-store/tempElasticsearchDownload/*
+tempElasticsearchDownload
+cache.db
